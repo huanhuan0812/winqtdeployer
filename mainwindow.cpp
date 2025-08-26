@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     currentLanguage = systemLanguage; // 设置当前语言为系统语言
-    currentLanguage = "en_US"; // 默认语言
+    //currentLanguage = "en_US"; // 默认语言
     loadTranslations();
     setupUI();
     createConnections();
