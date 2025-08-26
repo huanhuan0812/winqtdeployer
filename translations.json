@@ -1,0 +1,34 @@
+{
+  "zh_CN": {
+    "title": "Qt部署工具",
+    "success": "部署成功完成",
+    "warning": "有错误，部署失败",
+    "error": "部署完成但有警告",
+    "critical": "有错误，部署失败",
+    "timeout": "执行超时",
+    "startup": "启动失败",
+    "filepath": "文件路径",
+    "browse": "浏览",
+    "executable": "可执行文件:",
+    "qmldictionary": "QML目录(--qmldir):",
+    "modleselection": "模块选择",
+    "selectmodels_btn": "选择要排除的模块",
+    "none_selected": "未选择任何模块 - 将部署所有模块"
+  },
+  "en_US": {
+    "title": "Qt Deployment Tool",
+    "success": "Deployment completed successfully",
+    "warning": "There were warnings, deployment failed",
+    "error": "Deployment completed with errors",
+    "critical": "There were errors, deployment failed",
+    "timeout": "Execution timed out",
+    "startup": "Startup failed",
+    "filepath": "File path",
+    "browse": "Browse",
+    "executable": "Executable file:",
+    "qmldictionary": "QML directory(--qmldir):",
+    "modleselection": "Module selection",
+    "selectmodels_btn": "Select modules to exclude",
+    "none_selected": "No modules selected - all modules will be deployed"
+  }
+}

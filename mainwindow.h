@@ -62,6 +62,8 @@ private:
     void updateModulesDisplay();
     QSet<QString> getSelectedPluginTypes() const;
     bool createFolder(const QString &filePath);
+    bool loadTranslations();
+    QString translate(const QString &key);
 
     
     // 输入控件
@@ -108,6 +110,10 @@ private:
     QSet<QString> selectedSpecificPlugins;
 
     QSet<QString> selectedSpecificPluginTypes;
+
+    //翻译
+    QMap<QString, QString> translationMap;
+    QString currentLanguage;
 };
 
 #endif // MAINWINDOW_H

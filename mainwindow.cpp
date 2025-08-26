@@ -17,18 +17,51 @@
 #include <QApplication>
 #include <QStatusBar>
 #include <QFileDialog>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), settings(new QSettings("MyCompany", "WindDeployGUI", this))
 {
+    QString systemLanguage = QLocale::system().name(); // 格式如: "zh_CN", "en_US"
+
+    // 如果系统语言不在支持的语言列表中，使用默认英语
+    QSet<QString> supportedLanguages = {"en_US", "zh_CN"};
+    if (!supportedLanguages.contains(systemLanguage)) {
+        systemLanguage = "en_US";
+    }
+
+    currentLanguage = systemLanguage; // 设置当前语言为系统语言
+    currentLanguage = "en_US"; // 默认语言
+    loadTranslations();
     setupUI();
     createConnections();
     loadSettings();
-    setWindowTitle("Qt Deploy Tool GUI - windeployqt助手");
+    setWindowTitle(translate("title"));
     resize(900, 600);
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow() {
+}
+
+QString MainWindow::translate(const QString &key) {
+    // 首选：当前语言的翻译
+    if (translationMap.contains(key)) {
+        QString translation = translationMap.value(key);
+        if (!translation.isEmpty()) {
+            return translation;
+        }
+    }
+    // 备用：英语翻译（如果当前不是英语）
+    if (currentLanguage != "en_US") {
+        // 这里可以添加逻辑来加载英语翻译作为回退
+        // 或者维护一个默认的英语翻译映射
+    }
+    // 最后回退：返回键本身
+    qWarning() << "Translation not found for key:" << key;
+    return key;
+}
 
 void MainWindow::setupUI()
 {
@@ -36,58 +69,58 @@ void MainWindow::setupUI()
     QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
 
     // 文件路径选择组
-    QGroupBox *fileGroup = new QGroupBox("文件路径", this);
+    QGroupBox *fileGroup = new QGroupBox(translate("filepath"), this);
     QFormLayout *fileLayout = new QFormLayout(fileGroup);
 
     executableEdit = new QLineEdit(this);
-    browseExecutableBtn = new QPushButton("浏览...", this);
+    browseExecutableBtn = new QPushButton(translate("browse"), this);
     QHBoxLayout *exeLayout = new QHBoxLayout();
     exeLayout->addWidget(executableEdit);
     exeLayout->addWidget(browseExecutableBtn);
 
     qmlDirEdit = new QLineEdit(this);
-    browseQmlDirBtn = new QPushButton("浏览...", this);
+    browseQmlDirBtn = new QPushButton(translate("browse"), this);
     QHBoxLayout *qmlLayout = new QHBoxLayout();
     qmlLayout->addWidget(qmlDirEdit);
     qmlLayout->addWidget(browseQmlDirBtn);
 
-    fileLayout->addRow("可执行文件:", exeLayout);
-    fileLayout->addRow("QML目录 (--qmldir):", qmlLayout);
+    fileLayout->addRow(translate("executable"), exeLayout);
+    fileLayout->addRow(translate("qmldictionary"), qmlLayout);
 
     // 模块选择组
-    QGroupBox *moduleGroup = new QGroupBox("模块选择", this);
+    QGroupBox *moduleGroup = new QGroupBox(translate("modleselection"), this);
     QVBoxLayout *moduleLayout = new QVBoxLayout(moduleGroup);
 
-    selectModulesBtn = new QPushButton("选择要排除的模块", this);
+    selectModulesBtn = new QPushButton(translate("selectmodels_btn"), this);
     selectModulesBtn->setIcon(style()->standardIcon(QStyle::SP_DirOpenIcon));
 
     selectedModulesDisplay = new QTextEdit(this);
     selectedModulesDisplay->setMaximumHeight(80);
     selectedModulesDisplay->setReadOnly(true);
-    selectedModulesDisplay->setPlaceholderText("未选择任何模块 - 将部署所有依赖模块");
+    selectedModulesDisplay->setPlaceholderText(translate("none_selected"));
 
     moduleLayout->addWidget(selectModulesBtn);
-    moduleLayout->addWidget(new QLabel("已选择的排除模块:"));
+    moduleLayout->addWidget(new QLabel(translate("selected_to_exclude")));
     moduleLayout->addWidget(selectedModulesDisplay);
 
     // 选项组
-    QGroupBox *optionsGroup = new QGroupBox("部署选项", this);
+    QGroupBox *optionsGroup = new QGroupBox(translate("deployoptions"), this);
     QVBoxLayout *optionsLayout = new QVBoxLayout(optionsGroup);
 
-    noSystemD3dCompilerCheck = new QCheckBox("不部署D3D编译器 (--no-system-d3d-compiler)", this);
-    noSystemDxcCompilerCheck = new QCheckBox("不部署DXC编译器 (--no-system-dxc-compiler)", this);
-    noCompilerRuntimeCheck = new QCheckBox("不部署VC++运行时 (--no-compiler-runtime)", this);
-    noTranslationsCheck = new QCheckBox("不部署翻译文件 (--no-translations)", this);
-    noQuickImportCheck = new QCheckBox("不部署Qt Quick导入 (--no-quick-import)", this);
-    noOpenGlSwCheck = new QCheckBox("不部署软件OpenGL库 (--no-opengl-sw)", this);
-    noFfmpegCheck = new QCheckBox("不部署FFmpeg库 (--no-ffmpeg)", this);
-    forceCheck = new QCheckBox("强制覆盖文件 (--force)", this);
-    autoRunCheck = new QCheckBox("生成命令后自动运行", this);
+    noSystemD3dCompilerCheck = new QCheckBox(translate("no_d3d_compiler"), this);
+    noSystemDxcCompilerCheck = new QCheckBox(translate("no_dxc_compiler"), this);
+    noCompilerRuntimeCheck = new QCheckBox(translate("no_compiler_runtime"), this);
+    noTranslationsCheck = new QCheckBox(translate("no_translations"), this);
+    noQuickImportCheck = new QCheckBox(translate("no_quick_import"), this);
+    noOpenGlSwCheck = new QCheckBox(translate("no_opengl_sw"), this);
+    noFfmpegCheck = new QCheckBox(translate("no_ffmpeg"), this);
+    forceCheck = new QCheckBox(translate("force"), this);
+    autoRunCheck = new QCheckBox(translate("auto_run"), this);
 
     // 设置默认选中状态
     noSystemD3dCompilerCheck->setChecked(true);
     noSystemDxcCompilerCheck->setChecked(true);
-    noCompilerRuntimeCheck->setChecked(true);
+    noCompilerRuntimeCheck->setChecked(false);
     noTranslationsCheck->setChecked(true);
     noQuickImportCheck->setChecked(false);
     noOpenGlSwCheck->setChecked(false);
@@ -107,9 +140,9 @@ void MainWindow::setupUI()
 
     // 按钮组
     QHBoxLayout *buttonLayout = new QHBoxLayout();
-    generateBtn = new QPushButton("生成并运行命令", this);
-    copyBtn = new QPushButton("复制命令", this);
-    runBtn = new QPushButton("仅运行", this);
+    generateBtn = new QPushButton(translate("auto_run"), this);
+    copyBtn = new QPushButton(translate("copy_command"), this);
+    runBtn = new QPushButton(translate("run_only"), this);
 
     generateBtn->setIcon(style()->standardIcon(QStyle::SP_FileIcon));
     copyBtn->setIcon(style()->standardIcon(QStyle::SP_FileDialogContentsView));
@@ -120,15 +153,15 @@ void MainWindow::setupUI()
     buttonLayout->addWidget(runBtn);
 
     // 输出组
-    QGroupBox *outputGroup = new QGroupBox("生成的命令", this);
+    QGroupBox *outputGroup = new QGroupBox(translate("generated_command"), this);
     QVBoxLayout *outputLayout = new QVBoxLayout(outputGroup);
     commandOutput = new QTextEdit(this);
-    commandOutput->setPlaceholderText("这里将显示生成的windeployqt命令...");
+    commandOutput->setPlaceholderText(translate("command_placeholder"));
     commandOutput->setMaximumHeight(100);
     outputLayout->addWidget(commandOutput);
 
     // 状态栏
-    statusLabel = new QLabel("就绪", this);
+    statusLabel = new QLabel(translate("ready"), this);
     statusBar()->addWidget(statusLabel);
 
     // 组装主布局
@@ -190,17 +223,11 @@ void MainWindow::saveSettings()
 void MainWindow::updateModulesDisplay()
 {
     if (selectedModules.isEmpty() && selectedPluginTypes.isEmpty()) {
-        selectedModulesDisplay->setPlainText("未选择任何组件 - 将部署所有依赖项");
+        selectedModulesDisplay->setPlainText(translate("none_selected"));
     } else {
         // 创建友好的显示名称映射
         QMap<QString, QString> displayNames = {
             {"quick-import", "Qt Quick 1导入"},
-            {"system-d3d-compiler", "系统D3D编译器"},
-            {"system-dxc-compiler", "系统DXC编译器"},
-            {"compiler-runtime", "编译器运行时"},
-            {"translations", "翻译文件"},
-            {"opengl-sw", "软件OpenGL库"},
-            {"ffmpeg", "FFmpeg库"},
             {"angle", "ANGLE库"},
             {"qml-debug", "QML调试库"},
             {"3danimation", "3D动画模块"},
@@ -288,6 +315,42 @@ void MainWindow::updateModulesDisplay()
     }
 }
 
+bool MainWindow::loadTranslations() {
+    QFile file("./translations.json");
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Failed to open translations file:" << file.errorString();
+        return false;
+    }
+
+    QByteArray data = file.readAll();
+    file.close();
+
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+    if (parseError.error != QJsonParseError::NoError) {
+        qWarning() << "JSON parse error:" << parseError.errorString();
+        return false;
+    }
+
+    QJsonObject rootObj = doc.object();
+    QString lang = currentLanguage.isEmpty() ? "en_US" : currentLanguage;
+
+    if (!rootObj.contains(lang)) {
+        qWarning() << "Language not found:" << lang;
+        return false;
+    }
+
+    QJsonObject langObj = rootObj[lang].toObject();
+    translationMap.clear();
+
+    for (auto it = langObj.constBegin(); it != langObj.constEnd(); ++it) {
+        translationMap[it.key()] = it.value().toString();
+    }
+
+    return true;
+}
+
+
 void MainWindow::selectModules()
 {
     ModuleSelectionDialog dialog(this);
@@ -314,7 +377,7 @@ void MainWindow::selectModules()
 
 void MainWindow::browseExecutable()
 {
-    QString file = QFileDialog::getOpenFileName(this, "选择可执行文件", "", "Executable Files (*.exe)");
+    QString file = QFileDialog::getOpenFileName(this, translate("select_executable"), "", "Executable Files (*.exe)");
     if (!file.isEmpty()) {
         executableEdit->setText(file);
     }
@@ -322,7 +385,7 @@ void MainWindow::browseExecutable()
 
 void MainWindow::browseQmlDir()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, "选择QML目录");
+    QString dir = QFileDialog::getExistingDirectory(this, translate("select_qml_dir"));
     if (!dir.isEmpty()) {
         qmlDirEdit->setText(dir);
     }
@@ -348,18 +411,18 @@ QSet<QString> MainWindow::getDirectoryContents(const QString &dirPath)
 
 void MainWindow::showDirectoryContents(const QSet<QString> &contents)
 {
-    QString message = "目标目录包含以下文件和文件夹：\n\n";
+    QString message = translate("directory_content") + ":\n\n";
 
     if (contents.isEmpty()) {
-        message += "（空目录）";
+        message += translate("directory_empty");
     } else {
         for (const QString &item : contents) {
             message += "• " + item + "\n";
         }
     }
 
-    message += "\n请选择操作：";
-    QMessageBox::information(this, "目录内容", message);
+    message += "\n" + translate("select_opration");
+    QMessageBox::information(this, translate("directory_content"), message);
 }
 
 bool MainWindow::checkAndCleanDirectory(const QString &dirPath)
@@ -382,13 +445,13 @@ bool MainWindow::checkAndCleanDirectory(const QString &dirPath)
 
     // 询问用户操作
     QMessageBox msgBox(this);
-    msgBox.setWindowTitle("目录清理");
-    msgBox.setText("目标目录中包含其他文件，请选择操作：");
+    msgBox.setWindowTitle(translate("directory_cleanup"));
+    msgBox.setText(translate("dir_has_content"));
     msgBox.setIcon(QMessageBox::Question);
 
-    QPushButton *clearButton = msgBox.addButton("清除所有文件", QMessageBox::DestructiveRole);
-    QPushButton *moveButton = msgBox.addButton("移动到临时目录", QMessageBox::ActionRole);
-    QPushButton *cancelButton = msgBox.addButton("取消", QMessageBox::RejectRole);
+    QPushButton *clearButton = msgBox.addButton(translate("clear_all"), QMessageBox::DestructiveRole);
+    QPushButton *moveButton = msgBox.addButton(translate("move_to_temp"), QMessageBox::ActionRole);
+    QPushButton *cancelButton = msgBox.addButton(translate("cancel"), QMessageBox::RejectRole);
 
     msgBox.exec();
 
@@ -416,21 +479,21 @@ bool MainWindow::clearDirectory(const QString &dirPath, const QString &exePath)
                 QDir subDir(fileInfo.absoluteFilePath());
                 if (!subDir.removeRecursively()) {
                     success = false;
-                    QMessageBox::warning(this, "警告",
-                        QString("无法删除目录: %1").arg(fileInfo.fileName()));
+                    QMessageBox::warning(this, translate("warning"),
+                        QString(translate("unable_remove_dir")+fileInfo.fileName()));
                 }
             } else {
                 if (!QFile::remove(fileInfo.absoluteFilePath())) {
                     success = false;
-                    QMessageBox::warning(this, "警告",
-                        QString("无法删除文件: %1").arg(fileInfo.fileName()));
+                    QMessageBox::warning(this, translate("warning"),
+                        QString(translate("unable_remove_file")+fileInfo.fileName()));
                 }
             }
         }
     }
 
     if (success) {
-        QMessageBox::information(this, "成功", "目录已清理完成");
+        QMessageBox::information(this, translate("success"), translate("cleanup_success"));
     }
 
     return success;
@@ -447,7 +510,7 @@ bool MainWindow::moveToTempDirectory(const QString &sourceDir, const QString &ex
     QString tempDirPath = QDir::tempPath() + "/" + tempDirName;
 
     if (!dir.mkpath(tempDirPath)) {
-        QMessageBox::critical(this, "错误", "无法创建临时目录");
+        QMessageBox::critical(this, translate("error"), translate("tempdir_unable"));
         return false;
     }
 
@@ -461,21 +524,21 @@ bool MainWindow::moveToTempDirectory(const QString &sourceDir, const QString &ex
                 QDir subDir(fileInfo.absoluteFilePath());
                 if (!subDir.rename(fileInfo.absoluteFilePath(), destPath)) {
                     success = false;
-                    QMessageBox::warning(this, "警告",
-                        QString("无法移动目录: %1").arg(fileInfo.fileName()));
+                    QMessageBox::warning(this, translate("warning"),
+                        QString(translate("unable_move_dir")+fileInfo.fileName()));
                 }
             } else {
                 if (!QFile::rename(fileInfo.absoluteFilePath(), destPath)) {
                     success = false;
-                    QMessageBox::warning(this, "警告",
-                        QString("无法移动文件: %1").arg(fileInfo.fileName()));
+                    QMessageBox::warning(this, translate("warning"),
+                        QString(translate("unable_move_file")+fileInfo.fileName()));
                 }
             }
         }
     }
 
     if (success) {
-        QMessageBox::information(this, "成功",
+        QMessageBox::information(this, translate("success"),
             QString("文件已移动到临时目录:\n%1").arg(tempDirPath));
     }
 
@@ -489,20 +552,20 @@ QString MainWindow::generateCommandString()
     // 添加可执行文件路径
     QString exePath = executableEdit->text().trimmed();
     if (exePath.isEmpty()) {
-        QMessageBox::warning(this, "警告", "请先选择可执行文件！");
+        QMessageBox::warning(this, translate("warning"), translate("select_executable"));
         return "";
     }
 
     QFileInfo exeInfo(exePath);
     if (!exeInfo.exists()) {
-        QMessageBox::warning(this, "警告", "可执行文件不存在！");
+        QMessageBox::warning(this, translate("warning"), translate("file_not_exist"));
         return "";
     }
 
     // 检查并清理目录
     QString exeDir = exeInfo.absolutePath();
     if (!checkAndCleanDirectory(exeDir)) {
-        QMessageBox::information(this, "信息", "操作已取消");
+        QMessageBox::information(this, translate("info"), translate("operation_cancelled"));
         return "";
     }
 
@@ -563,7 +626,7 @@ void MainWindow::generateCommand()
     }
 
     commandOutput->setPlainText(command);
-    statusLabel->setText("命令已生成");
+    statusLabel->setText(translate("command_generated"));
 
     // 如果设置了自动运行，则直接运行命令
     if (autoRunCheck->isChecked()) {
@@ -578,9 +641,9 @@ void MainWindow::copyCommand()
     QString command = commandOutput->toPlainText();
     if (!command.isEmpty()) {
         QGuiApplication::clipboard()->setText(command);
-        statusLabel->setText("命令已复制到剪贴板");
+        statusLabel->setText(translate("command_copied"));
     } else {
-        QMessageBox::information(this, "提示", "没有可复制的命令内容");
+        QMessageBox::information(this, translate("info"), "没有可复制的命令内容");
     }
 }
 
@@ -612,47 +675,21 @@ void MainWindow::runCommand()
         command = commandOutput->toPlainText();
     }
 
-    statusLabel->setText("正在执行命令...");
+    statusLabel->setText(translate("executing"));
     QApplication::processEvents(); // 更新UI
 
     QProcess process;
     QFileInfo exeInfo(executableEdit->text());
-
-
-    // QDir dir(executableEdit->text());
-    // QString baseDir = exeInfo.absolutePath();
-    // // 创建lib目录
-    // if (!dir.exists("lib")) {
-    //     if (!dir.mkdir("lib")) {
-    //         QMessageBox::warning(this, "警告",
-    //             QString("无法创建lib目录:\n%1/lib").arg(baseDir));
-    //     }
-    // } else {
-    //     // 如果lib目录已存在，确保它是可写的
-    //     QFileInfo libInfo(baseDir + "/lib");
-    //     if (!libInfo.isWritable()) {
-    //         QMessageBox::warning(this, "警告",
-    //             QString("lib目录不可写:\n%1/lib").arg(baseDir));
-    //     }
-    // }
-    //
-    // // 创建plugins目录
-    // if (!dir.exists("plugins")) {
-    //     if (!dir.mkdir("plugins")) {
-    //         QMessageBox::warning(this, "警告",
-    //             QString("无法创建plugins目录:\n%1/plugins").arg(baseDir));
-    //     }
-    // }
 
     // 确保路径使用正确的分隔符
     QString workingDir = exeInfo.absolutePath();
     workingDir = QDir::toNativeSeparators(workingDir); // 转换为本地分隔符
     process.setWorkingDirectory(workingDir);
 
-    if (!createFolder(workingDir+"/lib"))QMessageBox::warning(this, "警告",
-            QString("无法创建lib目录:\n%1/lib").arg(workingDir));
-    if (!createFolder(workingDir+"/plugins"))QMessageBox::warning(this, "警告",
-            QString("无法创建plugins目录:\n%1/plugins").arg(workingDir));
+    if (!createFolder(workingDir+"/lib"))QMessageBox::warning(this, translate("warning"),
+            QString(translate("unable_create_lib_dir")+"\n%1/lib").arg(workingDir));
+    if (!createFolder(workingDir+"/plugins"))QMessageBox::warning(this, translate("warning"),
+            QString(translate("unable_create_plugins_dir")+"\n%1/plugins").arg(workingDir));
 
     // 调试信息 - 显示实际执行的命令和工作目录
     qDebug() << "Working directory:" << workingDir;
@@ -700,9 +737,9 @@ void MainWindow::runCommand()
 
     // 检查文件是否存在
     if (!QFile::exists(exePath)) {
-        QMessageBox::warning(this, "错误",
-            QString("可执行文件不存在:\n%1").arg(exePath));
-        statusLabel->setText("文件不存在");
+        QMessageBox::warning(this, translate("error"),
+            QString(translate("file_not_exist")+":\n%1").arg(exePath));
+        statusLabel->setText(translate("file_not_exist"));
         return;
     }
 
@@ -723,14 +760,14 @@ void MainWindow::runCommand()
             QString error = QString::fromLocal8Bit(process.readAllStandardError());
 
             QString result = "命令执行完成！\n\n";
-            result += "退出代码: " + QString::number(process.exitCode()) + "\n\n";
+            result += translate("exitcode") + QString::number(process.exitCode()) + "\n\n";
 
             if (!output.isEmpty()) {
-                result += "输出:\n" + output + "\n";
+                result += translate("output") + "\n" + output + "\n";
             }
 
             if (!error.isEmpty()) {
-                result += "错误:\n" + error + "\n";
+                result += translate("error")+"\n" + error + "\n";
             }
 
             // 保存日志到文件
@@ -744,20 +781,20 @@ void MainWindow::runCommand()
             }
 
             if (process.exitCode() == 0) {
-                QMessageBox::information(this, "成功", result);
-                statusLabel->setText("部署成功完成");
+                QMessageBox::information(this, translate("success"), result);
+                statusLabel->setText(translate("success_deploy"));
             } else {
-                QMessageBox::warning(this, "警告", result);
-                statusLabel->setText("部署完成但有警告");
+                QMessageBox::warning(this, translate("error"), result);
+                statusLabel->setText(translate("warning_deploy"));
             }
         } else {
             process.kill();
-            QMessageBox::critical(this, "错误", "命令执行超时");
-            statusLabel->setText("执行超时");
+            QMessageBox::critical(this, translate("error"), translate("timeout_deploy"));
+            statusLabel->setText(translate("timeout_deploy"));
         }
     } else {
-        QMessageBox::critical(this, "错误",
-            QString("无法启动windeployqt进程\n错误: %1").arg(process.errorString()));
-        statusLabel->setText("启动失败");
+        QMessageBox::critical(this, translate("error"),
+            QString(translate("unable_start_windeployqt")+"\n"+translate("error")+process.errorString()));
+        statusLabel->setText(translate("startup_deploy"));
     }
 }
