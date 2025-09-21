@@ -316,7 +316,7 @@ void MainWindow::updateModulesDisplay()
 }
 
 bool MainWindow::loadTranslations() {
-    QFile file("./translations.json");
+    QFile file(":/translations.json");
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Failed to open translations file:" << file.errorString();
         return false;
@@ -580,7 +580,7 @@ QString MainWindow::generateCommandString()
     // 添加默认的lib和plugin目录
     //command += " --libdir \"" + exeDir + "/lib\"";
     //command += " --plugindir \"" + exeDir + "/plugin\"";
-    command += " --libdir lib";
+    //command += " --libdir lib";
     command += " --plugindir plugins";
 
     if (!selectedSpecificPlugins.isEmpty()) {
@@ -686,8 +686,8 @@ void MainWindow::runCommand()
     workingDir = QDir::toNativeSeparators(workingDir); // 转换为本地分隔符
     process.setWorkingDirectory(workingDir);
 
-    if (!createFolder(workingDir+"/lib"))QMessageBox::warning(this, translate("warning"),
-            QString(translate("unable_create_lib_dir")+"\n%1/lib").arg(workingDir));
+    //if (!createFolder(workingDir+"/lib"))QMessageBox::warning(this, translate("warning"),
+    //        QString(translate("unable_create_lib_dir")+"\n%1/lib").arg(workingDir));
     if (!createFolder(workingDir+"/plugins"))QMessageBox::warning(this, translate("warning"),
             QString(translate("unable_create_plugins_dir")+"\n%1/plugins").arg(workingDir));
 

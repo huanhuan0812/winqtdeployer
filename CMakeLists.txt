@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 
-project(winqtdeployer VERSION 0.1 LANGUAGES CXX)
+project(winqtdeployer VERSION 1.2 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,6 +19,7 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         modelselectiondialog.cpp
+        resources.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
