@@ -17,30 +17,14 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
     moduleList = new QListWidget(this);
     moduleList->setSelectionMode(QListWidget::MultiSelection);
 
+    moduleTree = new CheckBoxTree(this);
+    layout->addWidget(moduleTree);
+    moduleTree->setHeaderLabel("选择要排除的模块");
+
 
     // 添加Qt库排除选项
     // 在 modelselectiondialog.cpp 中更新 Qt 库选项
     QMap<QString, QString> qtLibraryOptions = {
-        // 3D 相关库
-        {"3danimation", "3D动画模块"},
-        {"3dcore", "3D核心模块"},
-        {"3dextras", "3D额外模块"},
-        {"3dinput", "3D输入模块"},
-        {"3dlogic", "3D逻辑模块"},
-        {"3dquick", "3D Quick模块"},
-        {"3dquickanimation", "3D Quick动画"},
-        {"3dquickextras", "3D Quick额外"},
-        {"3dquickinput", "3D Quick输入"},
-        {"3dquickrender", "3D Quick渲染"},
-        {"3dquickscene2d", "3D Quick场景2D"},
-        {"3dquickscene3d", "3D Quick场景3D"},
-        {"3drender", "3D渲染模块"},
-
-    // ActiveQt 相关
-        {"activeqt", "ActiveQt模块"},
-        {"axbaseInternal", "ActiveX基础内部模块"},
-        {"axcontainer", "ActiveX容器模块"},
-        {"axserver", "ActiveX服务器模块"},
 
     // 图表和可视化
         {"bluetooth", "蓝牙模块"},
@@ -217,6 +201,34 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
         {"zlibInternal", "Zlib内部模块"}
     };
 
+    //fill librarytree 3d
+    {
+        QTreeWidgetItem *qt3d = moduleTree->addTopLevelItem("Qt 3d模块", "qt3d");
+        moduleTree->addChildItem(qt3d,"3D 动画模块","--no-3danimation");
+        moduleTree->addChildItem(qt3d,"3D 核心模块","--no-3dcore");
+        moduleTree->addChildItem(qt3d,"3D额外模块" , "--no-3dextras");
+        moduleTree->addChildItem(qt3d,"3D输入模块","--no-3dinput");
+        moduleTree->addChildItem(qt3d,"3D逻辑模块","--no-3dlogic");
+        QTreeWidgetItem *qt3dquick=moduleTree->addChildItem(qt3d,"3D Quick","3dquick");
+        moduleTree->addChildItem(qt3dquick,"3D Quick模块","--no-3dquick");
+        moduleTree->addChildItem(qt3dquick,"3D Quick动画","--no-3dquickanimation");
+        moduleTree->addChildItem(qt3dquick,"3D Quick额外模块","--no-3dquickextras");
+        moduleTree->addChildItem(qt3dquick,"3D Quick输入","--no-3dquickinput");
+        moduleTree->addChildItem(qt3dquick,"3D Quick渲染","--no-3dquickrender");
+        moduleTree->addChildItem(qt3dquick,"3D Quick场景2D","--no-3dquickscene2d");
+        moduleTree->addChildItem(qt3dquick,"3D Quick场景3D","--no-3dquickscene3d");
+        moduleTree->addChildItem(qt3d,"3D渲染模块","--no-3drender");
+    }
+
+    //fill library activeqt
+    {
+        QTreeWidgetItem *qtactive = moduleTree->addTopLevelItem("Qt Active", "qtactive");
+        moduleTree->addChildItem(qtactive,"ActiveQt模块","--no-activeqt");
+        moduleTree->addChildItem(qtactive,"ActiveX基础内部模块","--no-axbaseInternal");
+        moduleTree->addChildItem(qtactive,"ActiveX容器模块","--no-axcontainer");
+        moduleTree->addChildItem(qtactive,"ActiveX服务器模块","--no-axserver");
+    }
+
     // 添加插件类型排除选项（使用 skip-plugin-types）
     QMap<QString, QString> pluginTypeOptions = {
         {"platforms", "平台插件"},
@@ -296,6 +308,7 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
         {"qoffscreen", "离屏平台"},
         {"qwindows", "Windows平台"}
     };
+
 
     // 添加Qt库选项分组
     QListWidgetItem *qtLibraryHeader = new QListWidgetItem("Qt库选项 (使用 --no- 前缀)", moduleList);

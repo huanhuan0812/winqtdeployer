@@ -15,6 +15,7 @@
 #include <QListWidget>
 #include <QDialogButtonBox>
 #include <QMap>
+#include "CheckBoxTree.h"
 
 // 模块选择对话框
 class ModuleSelectionDialog : public QDialog
@@ -28,6 +29,7 @@ public:
 
 private:
     QListWidget *moduleList;
+    CheckBoxTree *moduleTree;
     QDialogButtonBox *buttonBox;
 };
 

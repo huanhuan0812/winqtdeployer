@@ -20,6 +20,8 @@ set(PROJECT_SOURCES
         mainwindow.h
         modelselectiondialog.cpp
         resources.qrc
+        CheckBoxTree.cpp
+        CheckBoxTree.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
