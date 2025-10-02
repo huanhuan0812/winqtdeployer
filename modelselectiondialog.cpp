@@ -27,96 +27,23 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
     QMap<QString, QString> qtLibraryOptions = {
 
     // 图表和可视化
-        {"bluetooth", "蓝牙模块"},
         {"bodymovinInternal", "Bodymovin内部模块"},
-        {"charts", "图表模块"},
-        {"chartsqml", "QML图表模块"},
-        {"datavisualization", "数据可视化"},
-        {"datavisualizationqml", "QML数据可视化"},
 
     // 核心模块
-        {"concurrent", "并发模块"},
-        {"core", "核心模块"},
-        {"core5compat", "Core5兼容模块"},
-        {"dbus", "DBus模块"},
-        {"designer", "设计器模块"},
-        {"designercomponentsInternal", "设计器组件内部模块"},
         {"devicediscoverysupportInternal", "设备发现支持内部模块"},
-        {"entrypointInternal", "入口点内部模块"},
 
     // 示例和内部模块
         {"exampleiconsInternal", "示例图标内部模块"},
         {"examplesassetdownloaderInternal", "示例资源下载器内部模块"},
-        {"fbsupportInternal", "帧缓冲支持内部模块"},
-        {"freetypeInternal", "FreeType内部模块"},
 
-    // 图形和渲染
-        {"graphs", "图形模块"},
-        {"graphswidgets", "图形控件模块"},
-        {"grpc", "gRPC模块"},
-        {"grpcquick", "Quick gRPC模块"},
-        {"gui", "GUI模块"},
-        {"harfbuzzInternal", "HarfBuzz内部模块"},
-        {"qthelp", "Qt帮助模块"},
-        {"httpserver", "HTTP服务器模块"},
-        {"jpegInternal", "JPEG内部模块"},
 
     // JSON 和网络
         {"jsonrpcInternal", "JSON-RPC内部模块"},
-        {"labsanimation", "实验室动画模块"},
-        {"labsfolderlistmodel", "实验室文件夹列表模型"},
-        {"labsplatform", "实验室平台模块"},
-        {"labsqmlmodels", "实验室QML模型"},
-        {"labssettings", "实验室设置模块"},
-        {"labssharedimage", "实验室共享图像"},
-        {"labswavefrontmesh", "实验室Wavefront网格"},
-        {"languageserverInternal", "语言服务器内部模块"},
-        {"linguist", "语言学家模块"},
-        {"location", "定位模块"},
 
-    // 多媒体
-        {"multimedia", "多媒体模块"},
-        {"multimediaquickInternal", "Quick多媒体内部模块"},
-        {"multimediatestlibInternal", "多媒体测试库内部模块"},
-        {"multimediawidgets", "多媒体控件模块"},
-
-    // 网络和通信
-        {"network", "网络模块"},
-        {"networkauth", "网络认证模块"},
-        {"nfc", "NFC模块"},
-        {"opengl", "OpenGL模块"},
-        {"openglwidgets", "OpenGL控件模块"},
-        {"packetprotocolInternal", "数据包协议内部模块"},
-        {"pngInternal", "PNG内部模块"},
-        {"positioning", "定位模块"},
-        {"positioningquick", "Quick定位模块"},
-        {"printsupport", "打印支持模块"},
-
-    // Protocol Buffers
-        {"protobuf", "Protocol Buffers模块"},
-        {"protobufqtcoretypes", "Protocol Buffers Qt核心类型"},
-        {"protobufqtguitypes", "Protocol Buffers Qt GUI类型"},
-        {"protobufquick", "Quick Protocol Buffers模块"},
-        {"protobufwellknowntypes", "Protocol Buffers已知类型"},
 
     // QML 相关
         {"qdocInternal", "QDoc内部模块"},
-        {"qml", "QML模块"},
-        {"qmlassetdownloader", "QML资源下载器"},
-        {"qmlcompiler", "QML编译器"},
-        {"qmlcore", "QML核心模块"},
-        {"qmldebugInternal", "QML调试内部模块"},
-        {"qmldomInternal", "QML DOM内部模块"},
-        {"qmlintegration", "QML集成模块"},
-        {"qmllocalstorage", "QML本地存储"},
-        {"qmllsInternal", "QML语言服务器内部模块"},
-        {"qmlmeta", "QML元数据模块"},
-        {"qmlmodels", "QML模型模块"},
-        {"qmlnetwork", "QML网络模块"},
-        {"qmltoolingsettingsInternal", "QML工具设置内部模块"},
-        {"qmltyperegistrarInternal", "QML类型注册器内部模块"},
-        {"qmlworkerscript", "QML工作脚本"},
-        {"qmlxmllistmodel", "QML XML列表模型"},
+
 
     // Quick 相关
         {"quick", "Quick模块"},
@@ -168,15 +95,10 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
         {"quickwidgets", "Quick控件"},
 
     // 其他模块
-        {"remoteobjects", "远程对象"},
-        {"remoteobjectsqml", "QML远程对象"},
         {"repparser", "Rep解析器"},
         {"scxml", "SCXML模块"},
         {"scxmlqml", "QML SCXML模块"},
-        {"sensors", "传感器模块"},
         {"sensorsquick", "Quick传感器模块"},
-        {"serialbus", "串行总线"},
-        {"serialport", "串行端口"},
         {"shadertools", "着色器工具"},
         {"spatialaudio", "空间音频"},
         {"sql", "SQL模块"},
@@ -186,7 +108,6 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
         {"svgwidgets", "SVG控件模块"},
         {"test", "测试模块"},
         {"texttospeech", "文本转语音模块"},
-        {"toolsInternal", "工具内部模块"},
         {"uiplugin", "UI插件"},
         {"uitools", "UI工具"},
         {"virtualkeyboard", "虚拟键盘"},
@@ -197,8 +118,7 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
         {"webview", "WebView模块"},
         {"webviewquick", "Quick WebView模块"},
         {"widgets", "Widgets模块"},
-        {"xml", "XML模块"},
-        {"zlibInternal", "Zlib内部模块"}
+        {"xml", "XML模块"}
     };
 
     //fill librarytree 3d
@@ -227,6 +147,164 @@ ModuleSelectionDialog::ModuleSelectionDialog(QWidget *parent)
         moduleTree->addChildItem(qtactive,"ActiveX基础内部模块","--no-axbaseInternal");
         moduleTree->addChildItem(qtactive,"ActiveX容器模块","--no-axcontainer");
         moduleTree->addChildItem(qtactive,"ActiveX服务器模块","--no-axserver");
+    }
+
+    //library core
+    {
+        QTreeWidgetItem *qtcore = moduleTree->addTopLevelItem("Qt 核心", "qtcore");
+        moduleTree->addChildItem(qtcore,"核心模块","--no-core");
+        moduleTree->addChildItem(qtcore,"Core5兼容模块","--no-core5compat");
+        moduleTree->addChildItem(qtcore,"入口点内部模块","--no-entrypointInternal");
+
+        QTreeWidgetItem *qtmutiple=moduleTree->addChildItem(qtcore,"并发与多线程","qtmutiple");
+        {
+            moduleTree->addChildItem(qtmutiple,"并发模块","--no-concurrent");
+            moduleTree->addChildItem(qtmutiple,"QML工作脚本","--no-qmlworkerscript");
+        }
+
+        QTreeWidgetItem *qtsys=moduleTree->addChildItem(qtcore,"系统间通信","qtipc");
+        {
+            moduleTree->addChildItem(qtsys,"DBus模块","--no-dbus");
+            moduleTree->addChildItem(qtsys," 远程对象","--no-remoteobjects");
+            moduleTree->addChildItem(qtsys," QML远程对象","--no-remoteobjectsqml");
+        }
+
+        QTreeWidgetItem *qtinternal=moduleTree->addChildItem(qtcore,"内部基础支持","qtinternal");
+        {
+            moduleTree->addChildItem(qtinternal,"工具内部模块","--no-toolsInternal");
+            moduleTree->addChildItem(qtinternal," 数据包协议内部模块","--no-packetprotocolInternal");
+            moduleTree->addChildItem(qtinternal," 帧缓冲支持内部模块","--no-fbsupportInternal");
+        }
+        moduleTree->addChildItem(qtcore,"Qt帮助模块","--no-qthelp");
+    }
+
+    //library gui
+    QTreeWidgetItem *qtgui = moduleTree->addTopLevelItem("Qt GUI与多媒体", "qtgui");
+    {
+        moduleTree->addChildItem(qtgui,"GUI模块","--no-gui");
+
+        QTreeWidgetItem *qtimage=moduleTree->addChildItem(qtgui,"图像格式支持","qtimage");
+        {
+            moduleTree->addChildItem(qtimage,"JPEG内部模块","--no-jpegInternal");
+            moduleTree->addChildItem(qtimage,"PNG内部模块","--no-pngInternal");
+            moduleTree->addChildItem(qtimage,"FreeType内部模块","--no-freetypeInternal");
+            moduleTree->addChildItem(qtimage,"Zlib内部模块","--no-zlibInternal");
+        }
+
+        QTreeWidgetItem *qtgraphic=moduleTree->addChildItem(qtgui,"图形与渲染","qtgraphic");
+        {
+            moduleTree->addChildItem(qtgraphic,"OpenGL模块","--no-opengl");
+            moduleTree->addChildItem(qtgraphic,"OpenGL控件模块","--no-openglwidgets");
+            moduleTree->addChildItem(qtgraphic,"图形模块","--no-graphs");
+            moduleTree->addChildItem(qtgraphic,"图形控件模块","--no-graphswidgets");
+            moduleTree->addChildItem(qtgraphic,"着色器工具模块","--no-shadertools");
+            moduleTree->addChildItem(qtgraphic,"HarfBuzz内部模块","--no-harfbuzzInternal");
+        }
+
+        QTreeWidgetItem *qttext=moduleTree->addChildItem(qtgui,"文本与字体","qttext");
+        {
+            moduleTree->addChildItem(qttext,"文本转语音模块","--no-texttospeech");
+            moduleTree->addChildItem(qttext,"字体数据库内部模块","--no-fontdatabaseInternal");
+        }
+    }
+
+    //library media
+    QTreeWidgetItem *qtmedia=moduleTree->addTopLevelItem("多媒体支持","qtmedia");
+    {
+        moduleTree->addChildItem(qtmedia,"多媒体模块","--no-multimedia");
+        moduleTree->addChildItem(qtmedia,"Quick多媒体内部模块","--no-multimediaquickInternal");
+        moduleTree->addChildItem(qtmedia,"多媒体测试库内部模块","--no-multimediatestlibInternal");
+        moduleTree->addChildItem(qtmedia,"多媒体控件模块","--no-multimediawidgets");
+        moduleTree->addChildItem(qtmedia,"空间音频模块","--no-spatialaudio");
+    }
+
+    //library network
+    QTreeWidgetItem *qtnetwork = moduleTree->addTopLevelItem("Qt 网络", "qtnetwork");
+    {
+        moduleTree->addChildItem(qtnetwork,"网络模块","--no-network");
+        moduleTree->addChildItem(qtnetwork,"网络认证模块","--no-networkauth");
+        moduleTree->addChildItem(qtnetwork,"位置模块","--no-location");
+        moduleTree->addChildItem(qtnetwork,"HTTP服务器模块","--no-httpserver");
+        moduleTree->addChildItem(qtnetwork,"gRPC模块","--no-grpc");
+        moduleTree->addChildItem(qtnetwork,"Quick gRPC模块","--no-grpcquick");
+    }
+
+    //library lab
+    QTreeWidgetItem *qtlab= moduleTree->addTopLevelItem("Qt 实验模块", "qtlab");
+    {
+        moduleTree->addChildItem(qtlab,"实验动画模块","--no-labsanimation");
+        moduleTree->addChildItem(qtlab,"实验文件夹列表模型","--no-labsfolderlistmodel");
+        moduleTree->addChildItem(qtlab,"实验平台模块","--no-labsplatform");
+        moduleTree->addChildItem(qtlab,"实验QML模型","--no-labsqmlmodels");
+        moduleTree->addChildItem(qtlab,"实验设置模块","--no-labssettings");
+        moduleTree->addChildItem(qtlab,"实验共享图像","--no-labssharedimage");
+        moduleTree->addChildItem(qtlab,"实验Wavefront网格","--no-labswavefrontmesh");
+    }
+
+    //library  Protocol Buffers
+    QTreeWidgetItem *qtprotobuf= moduleTree->addTopLevelItem("Qt Protocol Buffers", "qtprotobuf");
+    {
+        moduleTree->addChildItem(qtprotobuf,"Protocol Buffers模块","--no-protobuf");
+        moduleTree->addChildItem(qtprotobuf,"Protocol Buffers Qt核心类型","--no-protobufqtcoretypes");
+        moduleTree->addChildItem(qtprotobuf,"Protocol Buffers Qt GUI类型","--no-protobufqtguitypes");
+        moduleTree->addChildItem(qtprotobuf,"Quick Protocol Buffers模块","--no-protobufquick");
+        moduleTree->addChildItem(qtprotobuf,"Protocol Buffers已知类型","--no-protobufwellknowntypes");
+    }
+
+    //library QML
+    QTreeWidgetItem *qtqml= moduleTree->addTopLevelItem("Qt QML", "qtqml");
+    {
+        moduleTree->addChildItem(qtqml,"QML模块","--no-qml");
+        moduleTree->addChildItem(qtqml,"QML核心模块","--no-qmlcore");
+        moduleTree->addChildItem(qtqml,"QML网络模块","--no-qmlnetwork");
+        moduleTree->addChildItem(qtqml,"QML模型模块","--no-qmlmodels");
+        moduleTree->addChildItem(qtqml,"QML本地存储模块","--no-qmllocalstorage");
+        moduleTree->addChildItem(qtqml,"QML集成模块","--no-qmlintegration");
+        moduleTree->addChildItem(qtqml,"QML编译器模块","--no-qmlcompiler");
+        moduleTree->addChildItem(qtqml,"QML调试内部模块","--no-qmldebugInternal");
+        moduleTree->addChildItem(qtqml,"QML DOM内部模块","--no-qmldomInternal");
+        moduleTree->addChildItem(qtqml,"QML元数据模块","--no-qmlmeta");
+        moduleTree->addChildItem(qtqml,"QML语言服务器内部模块","--no-qmllsInternal");
+        moduleTree->addChildItem(qtqml,"QML工具设置内部模块","--no-qmltoolingsettingsInternal");
+        moduleTree->addChildItem(qtqml,"QML类型注册器内部模块","--no-qmltyperegistrarInternal");
+        moduleTree->addChildItem(qtqml,"QML XML列表模型","--no-qmlxmllistmodel");
+        moduleTree->addChildItem(qtqml,"QML资源下载器","--no-qmlassetdownloader");
+    }
+
+    //library land translate
+    QTreeWidgetItem *qtlinguist= moduleTree->addTopLevelItem("Qt 语言翻译", "qtlinguist");
+    {
+        moduleTree->addChildItem(qtlinguist,"语言学家模块","--no-linguist");
+        moduleTree->addChildItem(qtlinguist,"语言服务器内部模块","--no-linguistserverInternal");
+    }
+
+    //library hardware
+    QTreeWidgetItem *qthardware= moduleTree->addTopLevelItem("Qt 硬件与传感器", "qthardware");
+    {
+        moduleTree->addChildItem(qthardware,"串行总线模块","--no-serialbus");
+        moduleTree->addChildItem(qthardware,"串行端口模块","--no-serialport");
+        moduleTree->addChildItem(qthardware,"传感器模块","--no-sensors");
+        moduleTree->addChildItem(qthardware,"蓝牙模块","--no-bluetooth");
+        moduleTree->addChildItem(qthardware,"NFC模块","--no-nfc");
+        moduleTree->addChildItem(qthardware,"位置模块","--no-positioning");
+        moduleTree->addChildItem(qthardware,"位置Quick模块","--no-positioningquick");
+        moduleTree->addChildItem(qthardware,"打印支持模块","--no-printsupport");
+    }
+
+    //library design
+    QTreeWidgetItem *qtdesign= moduleTree->addTopLevelItem("Qt 设计与帮助", "qtdesign");
+    {
+        moduleTree->addChildItem(qtdesign,"设计器模块","--no-designer");
+        moduleTree->addChildItem(qtdesign,"设计器组件内部模块","--no-designercomponentsInternal");
+    }
+
+    //library chart
+    QTreeWidgetItem *qtchart= moduleTree->addTopLevelItem("Qt 图表", "qtchart");
+    {
+        moduleTree->addChildItem(qtchart,"图表模块","--no-charts");
+        moduleTree->addChildItem(qtchart,"QML图表模块","--no-chartsqml");
+        moduleTree->addChildItem(qtchart,"数据可视化","--no-datavisualization");
+        moduleTree->addChildItem(qtchart,"QML数据可视化","--no-datavisualizationqml");
     }
 
     // 添加插件类型排除选项（使用 skip-plugin-types）
